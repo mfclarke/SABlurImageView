@@ -98,7 +98,7 @@ public extension SABlurImageView {
     
     private func setLayers(index: Int, percentage: CGFloat, currentIndex: Int, nextIndex: Int) {
         if index != previousImageIndex {
-            CATransaction.animationWithDuration(0) { layer.contents = self.cgImages[currentIndex] }
+            layer.contents = self.cgImages[currentIndex]
             
             if nextBlurLayer == nil {
                 let nextBlurLayer = CALayer()
@@ -107,16 +107,16 @@ public extension SABlurImageView {
                 self.nextBlurLayer = nextBlurLayer
             }
             
-            CATransaction.animationWithDuration(0) {
-                self.nextBlurLayer?.contents = self.cgImages[nextIndex]
-                self.nextBlurLayer?.opacity = 1.0
-            }
+            self.nextBlurLayer?.contents = self.cgImages[nextIndex]
+            self.nextBlurLayer?.opacity = 1.0
         }
         previousImageIndex = index
         
         let minPercentage = percentage * 100.0
         let alpha = min(max((minPercentage - CGFloat(Int(minPercentage / 10.0)  * 10)) / 10.0, 0.0), 1.0)
-        CATransaction.animationWithDuration(0) { self.nextBlurLayer?.opacity = Float(alpha) }
+        self.nextBlurLayer?.opacity = Float(alpha)
+        self.nextBlurLayer?.setNeedsDisplay()
+        self.nextBlurLayer?.displayIfNeeded()
     }
 }
 
